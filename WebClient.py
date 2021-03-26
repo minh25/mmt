@@ -14,9 +14,10 @@ if __name__ == '__main__':
     clientSocket = socket(AF_INET, SOCK_STREAM)
     clientSocket.connect((serverName, serverPort))
 
-    clientSocket.sendall(b"GET /index.html HTTP/1.1\r\nHost: 192.168.1.15:1251\r\nAccept: text/html\r\n\r\n")
+    clientSocket.sendall("GET /{file} HTTP/1.1\r\nHost: 192.168.1.15:1251\r\nAccept: text/html\r\n\r\n".format(file=args[2]).encode())
 
     data = clientSocket.recv(4096)
-    print('From Server:', data.decode())
+    print()
+    print(data.decode())
 
     clientSocket.close()

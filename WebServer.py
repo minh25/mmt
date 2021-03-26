@@ -2,14 +2,14 @@ from socket import *
 import time
 import threading
 
-serverPort = 1258
+serverPort = 1260
 serverSocket = socket(AF_INET, SOCK_STREAM)
 serverSocket.bind(('', serverPort))
 serverSocket.listen()
 
 
 def socketThread(connectionSocket, address):
-    time.sleep(10)
+    # time.sleep(10)
     try:
         print(connectionSocket, address)
 
