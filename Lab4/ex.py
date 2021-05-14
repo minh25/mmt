@@ -1,3 +1,10 @@
+# Nhóm Fuck boi
+# Thành viên:
+# Nguyễn Văn Minh 19020050
+# Đặng Trung Kiên 19020078
+# Phạm Hoàng Lâm 19020344
+
+
 from socket import *
 import os
 import sys
@@ -33,6 +40,7 @@ def checksum(str_):
 
 
 def receiveOnePing(mySocket, ID, timeout, destAddr):
+    # timeLeft: thời gian còn lại của chờ response
     timeLeft = timeout
     while 1:
         startedSelect = time.time()
@@ -44,11 +52,17 @@ def receiveOnePing(mySocket, ID, timeout, destAddr):
         timeReceived = time.time()
         recPacket, addr = mySocket.recvfrom(1024)
 
+        # lấy dữ liệu từ bit 160 đến 223, (byte 20 đến 27)
         icmpHeader = recPacket[20:28]
+        # giải nén ra signed char/ signed char/ unsigned short/ unsigned short/ short
         icmpType, code, mychecksum, packetID, sequence = struct.unpack("bbHHh", icmpHeader)
 
+        # lấy dữ liệu thời gian
         if type != 8 and packetID == ID:
+            # kích thước double
             bytesInDouble = struct.calcsize("d")
+            # lấy giá trị thời gian
+            # ở request, data là thời gian
             timeSent = struct.unpack("d", recPacket[28:28 + bytesInDouble])[0]
             return timeReceived - timeSent
 
@@ -75,7 +89,6 @@ def sendOnePing(mySocket, destAddr, ID):
     # Convert 16-bit integers from host to network byte order.
     else:
         myChecksum = htons(myChecksum)
-    print(myChecksum)
 
     header = struct.pack("bbHHh", ICMP_ECHO_REQUEST, 0, myChecksum, ID, 1)
     packet = header + data
@@ -110,5 +123,3 @@ def ping(host, timeout=1):
 
 
 ping("127.0.0.1")
-
-# print(checksum(b"\x08\x00\x00\x00p)\x01\x00\x9d\x0c\x00\xb7\x91'\xd8A"))
